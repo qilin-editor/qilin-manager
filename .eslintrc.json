@@ -1,0 +1,33 @@
+{
+    "root": true,
+
+    "parser": "babel-eslint",
+    "extends": ["airbnb-base/legacy"],
+    "plugins": ["import"],
+
+    "env": {
+        "es6": true,
+        "browser": true
+    },
+
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true
+        }
+    },
+
+     "rules": {
+         "quotes": [1, "double"],
+         "indent": [2, 4],
+
+         "no-console": [0],
+         "no-param-reassign": [0],
+
+         "global-require": [0],
+         "import/first": [0],
+         "import/prefer-default-export": [0],
+         "import/no-extraneous-dependencies": [0]
+     }
+}
