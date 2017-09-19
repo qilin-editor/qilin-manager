@@ -1,0 +1,13 @@
+{
+    "presets" : [
+        "es2015",
+        "es2016",
+        "es2017",
+        "airbnb",
+        "stage-0"
+    ],
+
+    "plugins" : [
+        "add-module-exports"
+    ]
+}
