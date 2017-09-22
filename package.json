@@ -5,7 +5,8 @@
     "author": "Łaniewski Bartosz <laniewski.bartozzz@gmail.com> (http://laniewski.me/)",
     "license": "MIT",
     "dependencies": {
-        "download": "^6.2.5"
+        "download": "^6.2.5",
+        "request": "^2.82.0"
     },
     "devDependencies": {
         "eslint": "^4.6.1",
