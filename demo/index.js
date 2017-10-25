@@ -1,15 +1,17 @@
-var manager = require("../dist/index");
+const path = require("path");
+const manager = require("../dist/index").default;
 
-var Manager = manager({
-    // …
+const Manager = manager({
+  dest: path.resolve(__dirname, "./packages"),
 });
 
 let downloads = [
-    Manager.install("kevva/download"),
-    Manager.install("kevva/brightness"),
-    Manager.install("kevva/screenshot-stream")
+  Manager.install("kevva/download"),
+  Manager.install("kevva/brightness"),
+  Manager.install("kevva/screenshot-stream"),
 ];
 
 Promise.all(downloads).then(() => {
-    Manager.update();
+  Manager.update();
+  Manager.list().then(console.log);
 });

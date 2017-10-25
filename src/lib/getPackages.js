@@ -1,37 +1,43 @@
-import fs from "fs";
-import path from "path";
-import * as FilesUtils from "./utils/FilesUtils";
-import * as PackagesUtils from "./utils/PackagesUtils";
+// @flow
+import {join} from "path";
+import {readdirSync} from "fs";
+import {isDirectory} from "./utils/FilesUtils";
+import {getPackageData} from "./utils/PackagesUtils";
 
-export default function (source) {
-    if (typeof source === "object") {
-        source = source.dest;
-    }
+/**
+ * Asynchronously returns a list of installed packages in `dest` directory. The
+ * returned list is an object whose keys correspond to packages names and values
+ * to theirs respective versions:
+ * - `name` field is the same as in package.json
+ * - `version` field is the same as in package.json
+ *
+ * @example
+ *  > Manager.getPackages();
+ *  < {
+ *      "packageA": "version",
+ *      "packageB": "version",
+ *      "packageC": "version",
+ *    }
+ *
+ * @param   {string}  dest
+ * @return  {Promise}
+ * @async
+ */
 
-    return () => {
-        console.info(`[qilin-manager] Listing from: ${source}`);
+export default function(dest: string): () => Promise<Object> {
+  const files = readdirSync(dest).map((name) => join(dest, name));
+  const dirs = files.filter(isDirectory);
 
-        const files = fs.readdirSync(source).map(name => path.join(source, name));
-        const dirs = files.filter(FilesUtils.isDirectory);
-        const promises = [];
+  return async function(): Promise<Object> {
+    const versions = {};
+    const promises = [];
+    dirs.forEach((dir) => promises.push(getPackageData(dir)));
 
-        dirs.forEach((dir) => {
-            promises.push(PackagesUtils.getPackageData(dir));
-        });
+    try {
+      const packs = await Promise.all(promises);
+      packs.forEach((pack) => versions[pack.repository] = pack.version);
+    } catch (error) {/* … */}
 
-        return Promise.all(promises)
-            .then(packs => {
-                const versions = {};
-
-                packs.forEach(pack => {
-                    console.info(`[qilin-manager] Package: ${pack.repository} v${pack.version}`);
-                    versions[pack.repository] = pack.version;
-                });
-
-                return versions;
-            })
-            .catch(err => {
-                console.error(err);
-            });
-    };
+    return versions;
+  };
 }

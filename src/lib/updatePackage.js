@@ -1,38 +1,41 @@
+// @flow
 import getPackages from "./getPackages";
 import installPackage from "./installPackage";
 import * as GitHubUtils from "./utils/GitHubUtils";
 
-export default function (config) {
-    return () => {
-        getPackages(config.dest)().then(locals => {
-            let promises = [];
-            const install = installPackage(config);
+/**
+ * Asynchronously checks if locally installed packages are up-to-date. If no,
+ * those packages are fetched again.
+ *
+ * @example
+ *  > Manager.updatePackages();
+ *
+ * @param   {object}  config
+ * @return  {void}
+ * @async
+ */
 
-            Object.keys(locals).forEach(id => {
-                promises.push(GitHubUtils.getRepositoryPackage(id, config));
-            });
+export default function(config: Object): () => void {
+  return function(): void {
+    const fetchPackages = getPackages(config.dest);
+    const downloadPackage = installPackage(config);
+    const versions = [];
+    const download = [];
 
-            return Promise.all(promises)
-                .then(externals => {
-                    promises = [];
+    fetchPackages().then((locals = {}) => {
+      Object.keys(locals).forEach((id) => {
+        versions.push(GitHubUtils.getRepositoryPackage(id, config));
+      });
 
-                    externals.forEach(external => {
-                        const version = locals[external.repository];
-
-                        if (external.version !== version) {
-                            console.info(`[qilin-manager] Updating ${external.repository}@${version} to ${external.repository}@${external.version}`);
-
-                            promises.push(install(external.repository));
-                        } else {
-                            console.info(`[qilin-manager] ${external.repository}@${external.version} up to date`);
-                        }
-                    });
-
-                    return Promise.all(promises);
-                })
-                .catch(err => {
-                    console.error(err);
-                });
+      Promise.all(versions).then((externals) => {
+        externals.forEach((external) => {
+          if (external.version !== locals[external.repository]) {
+            download.push(downloadPackage(external.repository));
+          }
         });
-    };
+
+        return Promise.all(download);
+      });
+    });
+  };
 }

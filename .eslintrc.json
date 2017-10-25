@@ -1,33 +1,39 @@
 {
-    "root": true,
+  "parser": "babel-eslint",
+  "extends": ["eslint:recommended", "google"],
+  "plugins": ["import"],
 
-    "parser": "babel-eslint",
-    "extends": ["airbnb-base/legacy"],
-    "plugins": ["import"],
+  "env": {
+    "node": true
+  },
 
-    "env": {
-        "es6": true,
-        "browser": true
-    },
+  "parserOptions": {
+    "impliedStrict": true,
+    "ecmaVersion": 7,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    }
+  },
 
-    "parserOptions": {
-        "ecmaVersion": 6,
-        "sourceType": "module",
-        "ecmaFeatures": {
-            "experimentalObjectRestSpread": true
-        }
-    },
+  "globals": {
+    "Promise": true
+  },
 
-     "rules": {
-         "quotes": [1, "double"],
-         "indent": [2, 4],
+  "rules": {
+    "no-console": [0],
+    "no-invalid-this": [0],
+    "no-param-reassign": [0],
 
-         "no-console": [0],
-         "no-param-reassign": [0],
+    "indent": [2, 2],
+    "quotes": [2, "double"],
+    "space-in-parens": [2, "never"],
 
-         "global-require": [0],
-         "import/first": [0],
-         "import/prefer-default-export": [0],
-         "import/no-extraneous-dependencies": [0]
-     }
+    "require-jsdoc": [0],
+
+    "global-require": [0],
+    "import/first": [0],
+    "import/prefer-default-export": [0],
+    "import/no-extraneous-dependencies": [0]
+  }
 }
