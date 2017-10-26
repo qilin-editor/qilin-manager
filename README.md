@@ -2,7 +2,7 @@
   <h1>Qilin package manager</h1>
   <br>
 
-**qilin-manager** is a simple and minimal package manager which allows you to discover and install plugins and themes for [Qilin](https://github.com/qilin-editor/qilin-app). Packages are downloaded and prepared from GitHub.
+**qilin-manager** is a simple and minimal package manager which allows you to install plugins and themes for [Qilin](https://github.com/qilin-editor/qilin-app). Packages are downloaded and prepared from GitHub.
 </div>
 
 >**Disclaimer**: `qilin-manager` *is not a replacement for NPM, Yarn or any other package manager*. In fact, `qilin-manager` was created especially with [Qilin](https://github.com/qilin-editor/qilin-app) in mind and relies on NPM itself.
@@ -18,39 +18,47 @@ $ npm install qilin-manager
 ```javascript
 import QilinManager from "qilin-manager";
 
-const Manager = QilinManager({
-    dest: "",       // Default: $HOME/.qilin/ - destination folder
-    proxy: "",      // Default: undefined     - proxy settings
-    extract: true   // Default: true          - whether to extract downloaded archive
+const qpm = QilinManager({
+  // …
 });
 ```
 
 ### *Example 1: Download multiple packages*
 
 ```javascript
-let downloads = [
-    Manager.install("kevva/download"),
-    Manager.install("kevva/brightness"),
-    Manager.install("kevva/screenshot-stream")
-];
-
-Promise.all(downloads);
+Promise.all([
+  qpm.install("kevva/download"),
+  qpm.install("kevva/brightness"),
+  qpm.install("kevva/screenshot-stream")
+]).then(() => {
+  console.log("Done!");
+});
 ```
 
 ### *Example 2: List downloaded packages*
 
+You can list packages installed globally, or under a specific namespace with `qpm.list(namespace: ?string)`.
+
 ```javascript
-const packages = await Manager.list();
+const all = await qpm.list();
+const themes = await qpm.list("themes");
+const plugins = await qpm.list("plugins");
 ```
 
 ### *Example 3: Update downloaded packages*
 
+You can update packages installed globally (or under a certain namespace) with `qpm.update(namespace: ?namespace)`.
+
 ```javascript
-Manager.update().then(/* … */);
+qpm.update().then(/* … */);
+qpm.update("themes").then(/* … */);
+qpm.update("plugins").then(/* … */);
 ```
 
-### *Example 4: Building a package manually*
+### *Example 4: Building a package*
+
+Packages are builded automatically once they are downloaded from GitHub. If for any reason you need to rebuild a package manually, you can use `qpm.build(directory: string)`.
 
 ```javascript
-Manager.build("path/to/directory");
+qpm.build("path/to/directory").then(/* … */);
 ```
