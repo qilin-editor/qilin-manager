@@ -1,4 +1,5 @@
 // @flow
+import fs from "fs";
 import path from "path";
 import listPackages from "./lib/list";
 import buildPackage from "./lib/build";
@@ -31,6 +32,11 @@ export default function(options: Object = {}): Object {
     extract: true,
     ...options,
   };
+
+  // Create dest directory if it doesn't exist yet
+  if (!fs.existsSync(config.dest)) {
+    fs.mkdirSync(config.dest);
+  }
 
   return {
     install: installPackage(config),
