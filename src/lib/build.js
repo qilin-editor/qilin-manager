@@ -1,23 +1,36 @@
 // @flow
+import {debug as debugModule} from "debug";
 import {spawn} from "child_process";
 import {getPackageData} from "./utils/PackagesUtils";
 
+// For debug purpose only:
+const debug = debugModule("build");
+
+/**
+ * Scripts which should be executed in order to build a dependency.
+ *
+ * @see   https://docs.npmjs.com/misc/scripts
+ * @type  {Array}
+ */
 export const LIFECYCLE_SCRIPTS = [
   "postinstall",
   "prepare",
 ];
 
 /**
- * Executes a given NPM script in the specified directory.
+ * Executes a given NPM script in a specified directory.
  *
  * @param   {string}  directory
  * @param   {string}  script
- * @return  {Promise}
+ * @return  {Promise<number>}
  */
-export function execute(directory: string, script: string): Promise<*> {
+export function execute(directory: string, script: string): Promise<number> {
+  const depName = directory.split("/").pop();
   const command = (LIFECYCLE_SCRIPTS.indexOf(script) > -1)
     ? `npm run ${script}`
     : `npm ${script}`;
+
+  debug(`Executing "${command}" for ${depName}`);
 
   return new Promise((resolve, reject) => {
     const build = spawn(command, {
@@ -27,7 +40,8 @@ export function execute(directory: string, script: string): Promise<*> {
     });
 
     build.on("close", (code) => {
-      console.log(`Terminated ${script} for ${directory} with code ${code}`);
+      debug(`Terminated "${script}" for ${depName} with code ${code}`);
+
       if (code === 0) {
         resolve(code);
       } else {
@@ -58,7 +72,7 @@ export default async function(directory: string): Promise<*> {
   const init = await execute(directory, "install");
 
   if (init) {
-    console.log(`Installed dependencies for ${directory}`);
+    debug(`Installed dependencies for ${data.name}`);
   }
 
   for (let script of LIFECYCLE_SCRIPTS) {

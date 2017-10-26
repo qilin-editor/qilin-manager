@@ -1,7 +1,11 @@
 // @flow
+import {debug as debugModule} from "debug";
 import listPackages from "./list";
 import installPackage from "./install";
 import * as GitHubUtils from "./utils/GitHubUtils";
+
+// For debug purpose only:
+const debug = debugModule("update");
 
 /**
  * Asynchronously checks if locally installed packages are up-to-date. If no,
@@ -30,7 +34,12 @@ export default function(config: Object): () => void {
       Promise.all(versions).then((externals) => {
         externals.forEach((external) => {
           if (external.version !== locals[external.repository]) {
+            // eslint-disable-next-line
+            debug(`Updating ${external.repository} from ${locals[external.repository]} to ${external.version}`);
+
             download.push(downloadPackage(external.repository));
+          } else {
+            debug(`${external.repository} up-to-date`);
           }
         });
 
