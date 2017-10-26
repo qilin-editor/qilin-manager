@@ -13,8 +13,10 @@ const debug = debugModule("qilin:build");
  * @type  {Array}
  */
 export const LIFECYCLE_SCRIPTS = [
-  "postinstall",
-  "prepare",
+  // We can ignore those as they are triggered automatically after `npm install`
+  // "preinstall",
+  // "prepare",
+  // "postinstall",
 ];
 
 /**
