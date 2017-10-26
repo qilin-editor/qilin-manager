@@ -4,7 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof2 = require("babel-runtime/helpers/typeof");
+
+var _typeof3 = _interopRequireDefault(_typeof2);
 
 exports.parseRepository = parseRepository;
 exports.getArchiveLink = getArchiveLink;
@@ -30,9 +32,8 @@ function parseRepository(link) {
 
   return { owner: owner, name: name, branch: branch };
 }
-
 function getArchiveLink(repo) {
-  if ((typeof repo === "undefined" ? "undefined" : _typeof(repo)) !== "object") {
+  if ((typeof repo === "undefined" ? "undefined" : (0, _typeof3.default)(repo)) !== "object") {
     repo = parseRepository(repo);
   }
 
@@ -46,7 +47,7 @@ function getArchiveDir(link) {
 }
 
 function getRawFileLink(repo, file) {
-  if ((typeof repo === "undefined" ? "undefined" : _typeof(repo)) !== "object") {
+  if ((typeof repo === "undefined" ? "undefined" : (0, _typeof3.default)(repo)) !== "object") {
     repo = parseRepository(repo);
   }
 
@@ -56,7 +57,7 @@ function getRawFileLink(repo, file) {
 function getRepositoryPackage(repo) {
   var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-  if ((typeof repo === "undefined" ? "undefined" : _typeof(repo)) !== "object") {
+  if ((typeof repo === "undefined" ? "undefined" : (0, _typeof3.default)(repo)) !== "object") {
     repo = parseRepository(repo);
   }
 

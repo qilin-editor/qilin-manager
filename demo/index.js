@@ -5,14 +5,14 @@ const Manager = manager({
   dest: path.resolve(__dirname, "./packages"),
 });
 
-let downloads = [
-  Manager.install("Bartozzz/crawlerr"),
-  Manager.install("kevva/download"),
-  Manager.install("kevva/brightness"),
-  Manager.install("kevva/screenshot-stream"),
-];
-
-Promise.all(downloads).then(() => {
+Promise.all([
+  Manager.install("Bartozzz/crawlerr", "plugins"),
+  Manager.install("kevva/download", "themes"),
+  Manager.install("kevva/brightness", "themes"),
+  Manager.install("kevva/screenshot-stream", "themes"),
+]).then(() => {
   Manager.update();
-  Manager.list().then(console.log);
+
+  Manager.list("themes").then(console.log);
+  Manager.list("plugins").then(console.log);
 });
