@@ -1,7 +1,7 @@
 {
   "parser": "babel-eslint",
-  "extends": ["eslint:recommended", "google"],
-  "plugins": ["import"],
+  "extends": ["eslint:recommended", "plugin:flowtype/recommended", "google"],
+  "plugins": ["import", "flowtype"],
 
   "env": {
     "node": true
