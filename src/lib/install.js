@@ -6,7 +6,7 @@ import build from "./build";
 import * as GitHubUtils from "./utils/GitHubUtils";
 
 // For debug purpose only:
-const debug = debugModule("install");
+const debug = debugModule("qilin:install");
 
 /**
  * Asynchronously installs a specified package. Once downloaded, the package is

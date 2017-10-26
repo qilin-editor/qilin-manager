@@ -5,7 +5,7 @@ import installPackage from "./install";
 import * as GitHubUtils from "./utils/GitHubUtils";
 
 // For debug purpose only:
-const debug = debugModule("update");
+const debug = debugModule("qilin:update");
 
 /**
  * Asynchronously checks if locally installed packages are up-to-date. If no,

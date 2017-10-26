@@ -4,7 +4,7 @@ import {spawn} from "child_process";
 import {getPackageData} from "./utils/PackagesUtils";
 
 // For debug purpose only:
-const debug = debugModule("build");
+const debug = debugModule("qilin:build");
 
 /**
  * Scripts which should be executed in order to build a dependency.
