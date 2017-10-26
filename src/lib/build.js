@@ -1,7 +1,7 @@
 // @flow
 import {debug as debugModule} from "debug";
 import {spawn} from "child_process";
-import {getPackageData} from "./utils/PackagesUtils";
+import {readPackage} from "./utils/FilesUtils";
 
 // For debug purpose only:
 const debug = debugModule("qilin:build");
@@ -70,7 +70,7 @@ export function execute(directory: string, script: string): Promise<number> {
  * @async
  */
 export default async function(directory: string): Promise<*> {
-  const data = await getPackageData(directory);
+  const data = await readPackage(directory);
   const init = await execute(directory, "install");
 
   if (init) {

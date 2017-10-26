@@ -4,7 +4,7 @@ import listPackages from "./lib/list";
 import buildPackage from "./lib/build";
 import updatePackage from "./lib/update";
 import installPackage from "./lib/install";
-import * as FilesUtils from "./lib/utils/FilesUtils";
+import {home} from "./lib/utils/FilesUtils";
 
 /**
  * Returns a bunch of pre-configured commands for further usage.
@@ -27,8 +27,7 @@ import * as FilesUtils from "./lib/utils/FilesUtils";
  */
 export default function(options: Object = {}): Object {
   const config: Object = {
-    dest: path.resolve(FilesUtils.getHomeDir(), "./.qilin/"),
-    proxy: "",
+    dest: path.resolve(home, "./.qilin/"),
     extract: true,
     ...options,
   };

@@ -1,8 +1,26 @@
 // @flow
-import {join} from "path";
 import {readdirSync} from "fs";
-import {isDirectory} from "./utils/FilesUtils";
-import {getPackageData} from "./utils/PackagesUtils";
+import {join, resolve} from "path";
+import {isDirectory, isPackage, readPackage} from "./utils/FilesUtils";
+
+/**
+ * Returns an array of paths pointing to packages (each package must contain a
+ * `package.json` file).
+ *
+ * @param   {string}        directory
+ * @return  {Array<string>}
+ */
+export function findPackages(directory: string): Array<string> {
+  let output = [];
+  try {
+    output = readdirSync(directory)
+      .map((name) => join(directory, name))
+      .filter(isDirectory)
+      .filter(isPackage);
+  } catch (error) {/* … */}
+
+  return output;
+}
 
 /**
  * Asynchronously returns a list of installed packages in `dest` directory. The
@@ -12,7 +30,7 @@ import {getPackageData} from "./utils/PackagesUtils";
  * - `version` field is the same as in package.json
  *
  * @example
- *  > Manager.list();
+ *  > Manager.list("directory");
  *  < {
  *      "packageA": "version",
  *      "packageB": "version",
@@ -25,19 +43,15 @@ import {getPackageData} from "./utils/PackagesUtils";
  */
 
 export default function(dest: string): () => Promise<Object> {
-  const files = readdirSync(dest).map((name) => join(dest, name));
-  const dirs = files.filter(isDirectory);
+  return async function(directory: string = ""): Promise<Object> {
+    const source = resolve(dest, directory);
+    const output = {};
 
-  return async function(): Promise<Object> {
-    const versions = {};
-    const promises = [];
-    dirs.forEach((dir) => promises.push(getPackageData(dir)));
+    for (const pkg of findPackages(source)) {
+      const data = await readPackage(pkg);
+      output[data.name] = data.version;
+    }
 
-    try {
-      const packs = await Promise.all(promises);
-      packs.forEach((pack) => versions[pack.repository] = pack.version);
-    } catch (error) {/* … */}
-
-    return versions;
+    return output;
   };
 }

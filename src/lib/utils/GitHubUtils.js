@@ -1,7 +1,7 @@
 // @flow
 import request from "request";
 
-export function parseRepository(link:string): Object {
+export function parseRepository(link: string): Object {
   let branch: string = "master";
   let owner: string = link.split("/")[0];
   let name: string = link.split("/")[1];
@@ -14,7 +14,7 @@ export function parseRepository(link:string): Object {
   return {owner, name, branch};
 }
 
-export function getArchiveLink(repo: string|Object): string {
+export function getArchiveLink(repo: string | Object): string {
   if (typeof repo !== "object") {
     repo = parseRepository(repo);
   }
@@ -28,7 +28,7 @@ export function getArchiveDir(link: string): string {
   return `${dir[dir.length - 3]}-${dir[dir.length - 1]}`.slice(0, -4);
 }
 
-export function getRawFileLink(repo: string|Object, file: string): string {
+export function getRawFileLink(repo: string | Object, file: string): string {
   if (typeof repo !== "object") {
     repo = parseRepository(repo);
   }
@@ -37,7 +37,7 @@ export function getRawFileLink(repo: string|Object, file: string): string {
 }
 
 export function getRepositoryPackage(
-  repo: string|Object,
+  repo: string | Object,
   config: Object = {}
 ): Promise<Object> {
   if (typeof repo !== "object") {
