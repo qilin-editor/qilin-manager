@@ -12,7 +12,7 @@ import {getPackageData} from "./utils/PackagesUtils";
  * - `version` field is the same as in package.json
  *
  * @example
- *  > Manager.getPackages();
+ *  > Manager.list();
  *  < {
  *      "packageA": "version",
  *      "packageB": "version",

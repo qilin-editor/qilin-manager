@@ -2,8 +2,10 @@
   <h1>Qilin package manager</h1>
   <br>
 
-**qilin-manager** is a simple and minimal package manager which allows you to discover and install plugins and themes for Qilin. Packages are downloaded and prepared from GitHub.
+**qilin-manager** is a simple and minimal package manager which allows you to discover and install plugins and themes for [Qilin](https://github.com/qilin-editor/qilin-app). Packages are downloaded and prepared from GitHub.
 </div>
+
+>**Disclaimer**: `qilin-manager` *is not a replacement for NPM, Yarn or any other package manager*. In fact, `qilin-manager` was created especially with [Qilin](https://github.com/qilin-editor/qilin-app) in mind and relies on NPM itself.
 
 <h2 align="center">Installation</h2>
 
@@ -38,11 +40,17 @@ Promise.all(downloads);
 ### *Example 2: List downloaded packages*
 
 ```javascript
-Manager.list();
+const packages = await Manager.list();
 ```
 
 ### *Example 3: Update downloaded packages*
 
 ```javascript
-Manager.update();
+Manager.update().then(/* … */);
+```
+
+### *Example 4: Building a package manually*
+
+```javascript
+Manager.build("path/to/directory");
 ```

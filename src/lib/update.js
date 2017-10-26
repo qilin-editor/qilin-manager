@@ -1,6 +1,6 @@
 // @flow
-import getPackages from "./getPackages";
-import installPackage from "./installPackage";
+import listPackages from "./list";
+import installPackage from "./install";
 import * as GitHubUtils from "./utils/GitHubUtils";
 
 /**
@@ -8,7 +8,7 @@ import * as GitHubUtils from "./utils/GitHubUtils";
  * those packages are fetched again.
  *
  * @example
- *  > Manager.updatePackages();
+ *  Manager.update();
  *
  * @param   {object}  config
  * @return  {void}
@@ -17,7 +17,7 @@ import * as GitHubUtils from "./utils/GitHubUtils";
 
 export default function(config: Object): () => void {
   return function(): void {
-    const fetchPackages = getPackages(config.dest);
+    const fetchPackages = listPackages(config.dest);
     const downloadPackage = installPackage(config);
     const versions = [];
     const download = [];

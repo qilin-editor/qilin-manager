@@ -1,8 +1,8 @@
 // @flow
 import path from "path";
 import download from "download";
+import build from "./build";
 import * as GitHubUtils from "./utils/GitHubUtils";
-import * as PackagesUtils from "./utils/PackagesUtils";
 
 /**
  * Asynchronously installs a specified package. Once downloaded, the package is
@@ -20,7 +20,7 @@ import * as PackagesUtils from "./utils/PackagesUtils";
  * @async
  */
 
-export default function(config: Object): (pack:string) => Promise<string> {
+export default function(config: Object): (pack: string) => Promise<string> {
   return function(url: string, output: string = ""): Promise<string> {
     const repo = GitHubUtils.parseRepository(url);
     const link = GitHubUtils.getArchiveLink(repo);
@@ -30,8 +30,7 @@ export default function(config: Object): (pack:string) => Promise<string> {
       const dir = GitHubUtils.getArchiveDir(link);
       const pkg = path.resolve(dest, dir);
 
-      return PackagesUtils.installDependencies(pkg)
-        .then(() => PackagesUtils.preparePackage(pkg));
+      return build(pkg);
     });
   };
 }

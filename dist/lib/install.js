@@ -16,9 +16,7 @@ exports.default = function (config) {
       var dir = GitHubUtils.getArchiveDir(link);
       var pkg = _path2.default.resolve(dest, dir);
 
-      return PackagesUtils.installDependencies(pkg).then(function () {
-        return PackagesUtils.preparePackage(pkg);
-      });
+      return (0, _build2.default)(pkg);
     });
   };
 };
@@ -31,13 +29,13 @@ var _download = require("download");
 
 var _download2 = _interopRequireDefault(_download);
 
+var _build = require("./build");
+
+var _build2 = _interopRequireDefault(_build);
+
 var _GitHubUtils = require("./utils/GitHubUtils");
 
 var GitHubUtils = _interopRequireWildcard(_GitHubUtils);
-
-var _PackagesUtils = require("./utils/PackagesUtils");
-
-var PackagesUtils = _interopRequireWildcard(_PackagesUtils);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 

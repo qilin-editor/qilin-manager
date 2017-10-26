@@ -1,8 +1,9 @@
 // @flow
 import path from "path";
-import getPackages from "./lib/getPackages";
-import updatePackage from "./lib/updatePackage";
-import installPackage from "./lib/installPackage";
+import listPackages from "./lib/list";
+import buildPackage from "./lib/build";
+import updatePackage from "./lib/update";
+import installPackage from "./lib/install";
 import * as FilesUtils from "./lib/utils/FilesUtils";
 
 /**
@@ -16,6 +17,7 @@ import * as FilesUtils from "./lib/utils/FilesUtils";
  *  Manager.install(…);
  *  Manager.update(…);
  *  Manager.list(…);
+ *  Manager.build(…);
  *
  * @param   {Object}  options
  * @param   {string}  options.dest?
@@ -34,6 +36,7 @@ export default function(options: Object = {}): Object {
   return {
     install: installPackage(config),
     update: updatePackage(config),
-    list: getPackages(config.dest),
+    list: listPackages(config.dest),
+    build: buildPackage,
   };
 }

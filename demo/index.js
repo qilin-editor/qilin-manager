@@ -6,6 +6,7 @@ const Manager = manager({
 });
 
 let downloads = [
+  Manager.install("Bartozzz/crawlerr"),
   Manager.install("kevva/download"),
   Manager.install("kevva/brightness"),
   Manager.install("kevva/screenshot-stream"),

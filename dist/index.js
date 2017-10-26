@@ -36,9 +36,9 @@ exports.default = function () {
   }, options);
 
   return {
-    install: (0, _installPackage2.default)(config),
-    update: (0, _updatePackage2.default)(config),
-    list: (0, _getPackages2.default)(config.dest)
+    install: (0, _install2.default)(config),
+    update: (0, _update2.default)(config),
+    list: (0, _list2.default)(config.dest)
   };
 };
 
@@ -46,17 +46,17 @@ var _path = require("path");
 
 var _path2 = _interopRequireDefault(_path);
 
-var _getPackages = require("./lib/getPackages");
+var _list = require("./lib/list");
 
-var _getPackages2 = _interopRequireDefault(_getPackages);
+var _list2 = _interopRequireDefault(_list);
 
-var _updatePackage = require("./lib/updatePackage");
+var _update = require("./lib/update");
 
-var _updatePackage2 = _interopRequireDefault(_updatePackage);
+var _update2 = _interopRequireDefault(_update);
 
-var _installPackage = require("./lib/installPackage");
+var _install = require("./lib/install");
 
-var _installPackage2 = _interopRequireDefault(_installPackage);
+var _install2 = _interopRequireDefault(_install);
 
 var _FilesUtils = require("./lib/utils/FilesUtils");
 

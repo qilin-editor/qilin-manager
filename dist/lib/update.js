@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", {
 
 exports.default = function (config) {
   return function () {
-    var fetchPackages = (0, _getPackages2.default)(config.dest);
-    var downloadPackage = (0, _installPackage2.default)(config);
+    var fetchPackages = (0, _list2.default)(config.dest);
+    var downloadPackage = (0, _install2.default)(config);
     var versions = [];
     var download = [];
 
@@ -31,13 +31,13 @@ exports.default = function (config) {
   };
 };
 
-var _getPackages = require("./getPackages");
+var _list = require("./list");
 
-var _getPackages2 = _interopRequireDefault(_getPackages);
+var _list2 = _interopRequireDefault(_list);
 
-var _installPackage = require("./installPackage");
+var _install = require("./install");
 
-var _installPackage2 = _interopRequireDefault(_installPackage);
+var _install2 = _interopRequireDefault(_install);
 
 var _GitHubUtils = require("./utils/GitHubUtils");
 

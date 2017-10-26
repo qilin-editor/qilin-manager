@@ -47,6 +47,14 @@ function getPackageData(dir) {
     });
   });
 }
+
+/**
+ * Tries to execute a prepare script from NPM in a specified package.
+ *
+ * @param   {string}                  directory
+ * @return  {Promise<string|Buffer>}
+ */
+
 function preparePackage(directory) {
   return new Promise(function (resolve) {
     (0, _child_process.exec)("npm run prepare", {
@@ -57,10 +65,16 @@ function preparePackage(directory) {
   });
 }
 
-function installDependencies(pack) {
+/**
+ * Tries to install dependencies from NPM for a specified package.
+ *
+ * @param   {string}                  directory
+ * @return  {Promise<string|Buffer>}
+ */
+function installDependencies(directory) {
   return new Promise(function (resolve) {
     (0, _child_process.exec)("npm install", {
-      cwd: pack
+      cwd: directory
     }, function (error, stdout) {
       resolve(stdout);
     });
