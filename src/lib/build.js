@@ -22,13 +22,17 @@ export function execute(directory: string, script: string): Promise<*> {
   return new Promise((resolve, reject) => {
     const build = spawn(command, {
       cwd: directory,
-      env: process.env,
+      env: {...process.env, NODE_ENV: "development"},
       shell: true,
     });
 
     build.on("close", (code) => {
       console.log(`Terminated ${script} for ${directory} with code ${code}`);
-      resolve(code);
+      if (code === 0) {
+        resolve(code);
+      } else {
+        reject(code);
+      }
     });
   });
 }
