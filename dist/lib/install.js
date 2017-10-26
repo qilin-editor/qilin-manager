@@ -12,15 +12,19 @@ exports.default = function (config) {
     var link = GitHubUtils.getArchiveLink(repo);
     var dest = _path2.default.resolve(config.dest, output);
 
-    debug("Downloading " + url + " from " + link);
+    log("Downloading " + url + " from " + link);
 
     return (0, _download2.default)(link, dest, config).then(function () {
-      debug("Downloaded " + url);
+      log("Downloaded " + url);
 
       var dir = GitHubUtils.getArchiveDir(link);
       var pkg = _path2.default.resolve(dest, dir);
 
-      return (0, _build2.default)(pkg);
+      return (0, _FilesUtils.updatePackage)(pkg, {
+        legacyName: url
+      }).then(function () {
+        return (0, _build2.default)(pkg);
+      });
     });
   };
 };
@@ -43,12 +47,14 @@ var _GitHubUtils = require("./utils/GitHubUtils");
 
 var GitHubUtils = _interopRequireWildcard(_GitHubUtils);
 
+var _FilesUtils = require("./utils/FilesUtils");
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // For debug purpose only:
-var debug = (0, _debug.debug)("qilin:install");
+var log = (0, _debug.debug)("qilin:install");
 
 /**
  * Asynchronously installs a specified package. Once downloaded, the package is

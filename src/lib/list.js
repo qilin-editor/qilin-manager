@@ -42,14 +42,14 @@ export function findPackages(directory: string): Array<string> {
  * @async
  */
 
-export default function(dest: string): () => Promise<Object> {
+export default function(dest: string): (directory: string) => Promise<Object> {
   return async function(directory: string = ""): Promise<Object> {
     const source = resolve(dest, directory);
     const output = {};
 
     for (const pkg of findPackages(source)) {
       const data = await readPackage(pkg);
-      output[data.name] = data.version;
+      output[data.legacyName] = data.version;
     }
 
     return output;

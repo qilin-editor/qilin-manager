@@ -4,9 +4,10 @@ import path from "path";
 import download from "download";
 import build from "./build";
 import * as GitHubUtils from "./utils/GitHubUtils";
+import {updatePackage} from "./utils/FilesUtils";
 
 // For debug purpose only:
-const debug = debugModule("qilin:install");
+const log = debugModule("qilin:install");
 
 /**
  * Asynchronously installs a specified package. Once downloaded, the package is
@@ -30,15 +31,17 @@ export default function(config: Object): (pack: string) => Promise<string> {
     const link = GitHubUtils.getArchiveLink(repo);
     const dest = path.resolve(config.dest, output);
 
-    debug(`Downloading ${url} from ${link}`);
+    log(`Downloading ${url} from ${link}`);
 
     return download(link, dest, config).then(() => {
-      debug(`Downloaded ${url}`);
+      log(`Downloaded ${url}`);
 
       const dir = GitHubUtils.getArchiveDir(link);
       const pkg = path.resolve(dest, dir);
 
-      return build(pkg);
+      return updatePackage(pkg, {
+        legacyName: url,
+      }).then(() => build(pkg));
     });
   };
 }

@@ -11,8 +11,8 @@ Promise.all([
   Manager.install("kevva/brightness", "themes"),
   Manager.install("kevva/screenshot-stream", "themes"),
 ]).then(() => {
-  Manager.update();
-
+  Manager.update("themes");
+}).then(() => {
   Manager.list("themes").then(console.log);
   Manager.list("plugins").then(console.log);
 });

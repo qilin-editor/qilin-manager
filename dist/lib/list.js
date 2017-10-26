@@ -21,7 +21,7 @@ exports.default = function (dest) {
         var pkg = _step.value;
 
         var data = await (0, _FilesUtils.readPackage)(pkg);
-        output[data.name] = data.version;
+        output[data.legacyName] = data.version;
       }
     } catch (err) {
       _didIteratorError = true;

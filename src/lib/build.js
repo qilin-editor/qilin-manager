@@ -4,7 +4,7 @@ import {spawn} from "child_process";
 import {readPackage} from "./utils/FilesUtils";
 
 // For debug purpose only:
-const debug = debugModule("qilin:build");
+const log = debugModule("qilin:build");
 
 /**
  * Scripts which should be executed in order to build a dependency.
@@ -32,7 +32,7 @@ export function execute(directory: string, script: string): Promise<number> {
     ? `npm run ${script}`
     : `npm ${script}`;
 
-  debug(`Executing "${command}" for ${depName}`);
+  log(`Executing "${command}" for ${depName}`);
 
   return new Promise((resolve, reject) => {
     const build = spawn(command, {
@@ -42,7 +42,7 @@ export function execute(directory: string, script: string): Promise<number> {
     });
 
     build.on("close", (code) => {
-      debug(`Terminated "${script}" for ${depName} with code ${code}`);
+      log(`Terminated "${script}" for ${depName} with code ${code}`);
 
       if (code === 0) {
         resolve(code);
@@ -58,9 +58,10 @@ export function execute(directory: string, script: string): Promise<number> {
  * order to build the package.
  *
  * Scripts are executes in the order below:
- * 1. install
- * 2. postinstall
- * 3. prepare
+ * 1. preinstall
+ * 2. install
+ * 3. postinstall
+ * 4. prepare
  *
  * @example
  *  Manager.build("path/to/package_A")
@@ -74,7 +75,7 @@ export default async function(directory: string): Promise<*> {
   const init = await execute(directory, "install");
 
   if (init) {
-    debug(`Installed dependencies for ${data.name}`);
+    log(`Installed dependencies for ${data.name}`);
   }
 
   for (let script of LIFECYCLE_SCRIPTS) {

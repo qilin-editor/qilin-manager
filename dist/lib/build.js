@@ -20,7 +20,7 @@ var _FilesUtils = require("./utils/FilesUtils");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // For debug purpose only:
-var debug = (0, _debug.debug)("qilin:build");
+var log = (0, _debug.debug)("qilin:build");
 
 /**
  * Scripts which should be executed in order to build a dependency.
@@ -42,7 +42,7 @@ function execute(directory, script) {
   var depName = directory.split("/").pop();
   var command = LIFECYCLE_SCRIPTS.indexOf(script) > -1 ? "npm run " + script : "npm " + script;
 
-  debug("Executing \"" + command + "\" for " + depName);
+  log("Executing \"" + command + "\" for " + depName);
 
   return new Promise(function (resolve, reject) {
     var build = (0, _child_process.spawn)(command, {
@@ -52,7 +52,7 @@ function execute(directory, script) {
     });
 
     build.on("close", function (code) {
-      debug("Terminated \"" + script + "\" for " + depName + " with code " + code);
+      log("Terminated \"" + script + "\" for " + depName + " with code " + code);
 
       if (code === 0) {
         resolve(code);
@@ -68,9 +68,10 @@ function execute(directory, script) {
  * order to build the package.
  *
  * Scripts are executes in the order below:
- * 1. install
- * 2. postinstall
- * 3. prepare
+ * 1. preinstall
+ * 2. install
+ * 3. postinstall
+ * 4. prepare
  *
  * @example
  *  Manager.build("path/to/package_A")
@@ -85,7 +86,7 @@ exports.default = async function (directory) {
   var init = await execute(directory, "install");
 
   if (init) {
-    debug("Installed dependencies for " + data.name);
+    log("Installed dependencies for " + data.name);
   }
 
   var _iteratorNormalCompletion = true;

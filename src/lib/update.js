@@ -2,16 +2,29 @@
 import {debug as debugModule} from "debug";
 import listPackages from "./list";
 import installPackage from "./install";
-import * as GitHubUtils from "./utils/GitHubUtils";
+import {getRepositoryPackage} from "./utils/GitHubUtils";
 
 // For debug purpose only:
-const debug = debugModule("qilin:update");
+const log = debugModule("qilin:update");
+
+export function getNewVersions(
+  packages: Object,
+  config: Object
+): Promise<Array<*>> {
+  return Promise.all(
+    Object.keys(packages).map((id) => (
+      getRepositoryPackage(id, config)
+    ))
+  );
+}
 
 /**
  * Asynchronously checks if locally installed packages are up-to-date. If no,
  * those packages are fetched again.
  *
  * @example
+ *  Manager.update("plugins");
+ *  Manager.update("themes");
  *  Manager.update();
  *
  * @param   {object}  config
@@ -19,32 +32,24 @@ const debug = debugModule("qilin:update");
  * @async
  */
 
-export default function(config: Object): () => void {
-  return function(): void {
-    const fetchPackages = listPackages(config.dest);
-    const downloadPackage = installPackage(config);
-    const versions = [];
+export default function(config: Object): (directory: string) => Promise<*> {
+  const list = listPackages(config.dest);
+  const install = installPackage(config);
+
+  return async function(directory: string): Promise<*> {
     const download = [];
+    const packages = await list(directory);
+    const external = await getNewVersions(packages, config);
 
-    fetchPackages().then((locals = {}) => {
-      Object.keys(locals).forEach((id) => {
-        versions.push(GitHubUtils.getRepositoryPackage(id, config));
-      });
+    external.forEach((e) => {
+      if (e.version !== packages[e.repository]) {
+        // eslint-disable-next-line
+        log(`Updating ${e.repository}: ${packages[e.repository]} => ${e.version}`);
 
-      Promise.all(versions).then((externals) => {
-        externals.forEach((external) => {
-          if (external.version !== locals[external.repository]) {
-            // eslint-disable-next-line
-            debug(`Updating ${external.repository} from ${locals[external.repository]} to ${external.version}`);
-
-            download.push(downloadPackage(external.repository));
-          } else {
-            debug(`${external.repository} up-to-date`);
-          }
-        });
-
-        return Promise.all(download);
-      });
+        download.push(install(e.repository));
+      }
     });
+
+    return Promise.all(download);
   };
 }

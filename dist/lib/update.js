@@ -3,36 +3,27 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.getNewVersions = getNewVersions;
 
 exports.default = function (config) {
-  return function () {
-    var fetchPackages = (0, _list2.default)(config.dest);
-    var downloadPackage = (0, _install2.default)(config);
-    var versions = [];
+  var list = (0, _list2.default)(config.dest);
+  var install = (0, _install2.default)(config);
+
+  return async function (directory) {
     var download = [];
+    var packages = await list(directory);
+    var external = await getNewVersions(packages, config);
 
-    fetchPackages().then(function () {
-      var locals = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    external.forEach(function (e) {
+      if (e.version !== packages[e.repository]) {
+        // eslint-disable-next-line
+        log("Updating " + e.repository + ": " + packages[e.repository] + " => " + e.version);
 
-      Object.keys(locals).forEach(function (id) {
-        versions.push(GitHubUtils.getRepositoryPackage(id, config));
-      });
-
-      Promise.all(versions).then(function (externals) {
-        externals.forEach(function (external) {
-          if (external.version !== locals[external.repository]) {
-            // eslint-disable-next-line
-            debug("Updating " + external.repository + " from " + locals[external.repository] + " to " + external.version);
-
-            download.push(downloadPackage(external.repository));
-          } else {
-            debug(external.repository + " up-to-date");
-          }
-        });
-
-        return Promise.all(download);
-      });
+        download.push(install(e.repository));
+      }
     });
+
+    return Promise.all(download);
   };
 };
 
@@ -48,20 +39,24 @@ var _install2 = _interopRequireDefault(_install);
 
 var _GitHubUtils = require("./utils/GitHubUtils");
 
-var GitHubUtils = _interopRequireWildcard(_GitHubUtils);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // For debug purpose only:
-var debug = (0, _debug.debug)("qilin:update");
+var log = (0, _debug.debug)("qilin:update");
+
+function getNewVersions(packages, config) {
+  return Promise.all(Object.keys(packages).map(function (id) {
+    return (0, _GitHubUtils.getRepositoryPackage)(id, config);
+  }));
+}
 
 /**
  * Asynchronously checks if locally installed packages are up-to-date. If no,
  * those packages are fetched again.
  *
  * @example
+ *  Manager.update("plugins");
+ *  Manager.update("themes");
  *  Manager.update();
  *
  * @param   {object}  config
