@@ -3,8 +3,8 @@ import fs from "fs";
 import path from "path";
 import util from "util";
 
-const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
+export const readFile = util.promisify(fs.readFile);
+export const writeFile = util.promisify(fs.writeFile);
 
 export function isDirectory(source: string): boolean {
   return fs.lstatSync(source).isDirectory();
@@ -21,7 +21,8 @@ export function readPackage(directory: string): Promise<Object> {
   return readFile(file, "utf8").then((data) => {
     try {
       data = JSON.parse(data);
-      data.base = base;
+      data.directory = directory;
+      data.namespace = base;
       data.path = file;
 
       return data;

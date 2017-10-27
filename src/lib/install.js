@@ -25,11 +25,14 @@ const log = debugModule("qilin:install");
  * @async
  */
 
-export default function(config: Object): (pack: string) => Promise<string> {
-  return function(url: string, output: string = ""): Promise<string> {
+export default function(config: Object): (
+  url: string,
+  namespace?: string
+) => Promise<string> {
+  return function(url: string, namespace?: string = ""): Promise<string> {
     const repo = GitHubUtils.parseRepository(url);
     const link = GitHubUtils.getArchiveLink(repo);
-    const dest = path.resolve(config.dest, output);
+    const dest = path.resolve(config.dest, namespace);
 
     log(`Downloading ${url} from ${link}`);
 

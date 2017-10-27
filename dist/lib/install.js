@@ -6,11 +6,11 @@ Object.defineProperty(exports, "__esModule", {
 
 exports.default = function (config) {
   return function (url) {
-    var output = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+    var namespace = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
 
     var repo = GitHubUtils.parseRepository(url);
     var link = GitHubUtils.getArchiveLink(repo);
-    var dest = _path2.default.resolve(config.dest, output);
+    var dest = _path2.default.resolve(config.dest, namespace);
 
     log("Downloading " + url + " from " + link);
 

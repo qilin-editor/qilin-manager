@@ -25,6 +25,7 @@ exports.default = function () {
     install: (0, _install2.default)(config),
     update: (0, _update2.default)(config),
     list: (0, _list2.default)(config.dest),
+    load: (0, _load2.default)(config.dest),
     build: _build2.default
   };
 };
@@ -36,6 +37,10 @@ var _fs2 = _interopRequireDefault(_fs);
 var _path = require("path");
 
 var _path2 = _interopRequireDefault(_path);
+
+var _load = require("./lib/load");
+
+var _load2 = _interopRequireDefault(_load);
 
 var _list = require("./lib/list");
 

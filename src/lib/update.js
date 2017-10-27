@@ -32,19 +32,19 @@ export function getNewVersions(
  * @async
  */
 
-export default function(config: Object): (directory: string) => Promise<*> {
+export default function(config: Object): (namespace?: string) => Promise<*> {
   const list = listPackages(config.dest);
   const install = installPackage(config);
 
-  return async function(directory: string): Promise<*> {
+  return async function(namespace?: string): Promise<*> {
     const download = [];
-    const packages = await list(directory);
+    const packages = await list(namespace);
     const external = await getNewVersions(packages, config);
 
     external.forEach((e) => {
-      if (e.version !== packages[e.repository]) {
+      if (e.version !== packages[e.repository].version) {
         // eslint-disable-next-line
-        log(`Updating ${e.repository}: ${packages[e.repository]} => ${e.version}`);
+        log(`Updating ${e.repository}: ${packages[e.repository].version} => ${e.version}`);
 
         download.push(install(e.repository));
       }

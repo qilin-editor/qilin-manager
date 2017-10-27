@@ -7,9 +7,9 @@ exports.findPackages = findPackages;
 
 exports.default = function (dest) {
   return async function () {
-    var directory = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+    var namespace = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
 
-    var source = (0, _path.resolve)(dest, directory);
+    var source = (0, _path.resolve)(dest, namespace);
     var output = {};
 
     var _iteratorNormalCompletion = true;
@@ -21,7 +21,13 @@ exports.default = function (dest) {
         var pkg = _step.value;
 
         var data = await (0, _FilesUtils.readPackage)(pkg);
-        output[data.legacyName] = data.version;
+
+        output[data.legacyName] = {
+          namespace: data.namepsace,
+          directory: data.directory,
+          version: data.version,
+          package: data.path
+        };
       }
     } catch (err) {
       _didIteratorError = true;
@@ -74,11 +80,20 @@ function findPackages(directory) {
  * - `version` field is the same as in package.json
  *
  * @example
- *  > Manager.list("directory");
+ *  > Manager.list("some_namespace");
  *  < {
- *      "packageA": "version",
- *      "packageB": "version",
- *      "packageC": "version",
+ *      "packageA": {
+ *        "namespace": "some_namespace",
+ *        "directory": "packageA-master",
+ *        "version": "x.x.x",
+ *        "package": "path/to/package.json"
+ *      },
+ *      "packageB": {
+ *        "namespace": "some_namespace",
+ *        "directory": "packageB-master",
+ *        "version": "x.x.x",
+ *        "package": "path/to/package.json"
+ *      }
  *    }
  *
  * @param   {string}  dest

@@ -1,6 +1,7 @@
 // @flow
 import fs from "fs";
 import path from "path";
+import loadPackage from "./lib/load";
 import listPackages from "./lib/list";
 import buildPackage from "./lib/build";
 import updatePackage from "./lib/update";
@@ -42,6 +43,7 @@ export default function(options: Object = {}): Object {
     install: installPackage(config),
     update: updatePackage(config),
     list: listPackages(config.dest),
+    load: loadPackage(config.dest),
     build: buildPackage,
   };
 }

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.home = exports.isLinux = exports.isMacOs = exports.isWindows = undefined;
+exports.home = exports.isLinux = exports.isMacOs = exports.isWindows = exports.writeFile = exports.readFile = undefined;
 
 var _extends2 = require("babel-runtime/helpers/extends");
 
@@ -28,9 +28,8 @@ var _util2 = _interopRequireDefault(_util);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var readFile = _util2.default.promisify(_fs2.default.readFile);
-
-var writeFile = _util2.default.promisify(_fs2.default.writeFile);
+var readFile = exports.readFile = _util2.default.promisify(_fs2.default.readFile);
+var writeFile = exports.writeFile = _util2.default.promisify(_fs2.default.writeFile);
 
 function isDirectory(source) {
   return _fs2.default.lstatSync(source).isDirectory();
@@ -47,7 +46,8 @@ function readPackage(directory) {
   return readFile(file, "utf8").then(function (data) {
     try {
       data = JSON.parse(data);
-      data.base = base;
+      data.directory = directory;
+      data.namespace = base;
       data.path = file;
 
       return data;

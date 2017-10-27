@@ -9,15 +9,15 @@ exports.default = function (config) {
   var list = (0, _list2.default)(config.dest);
   var install = (0, _install2.default)(config);
 
-  return async function (directory) {
+  return async function (namespace) {
     var download = [];
-    var packages = await list(directory);
+    var packages = await list(namespace);
     var external = await getNewVersions(packages, config);
 
     external.forEach(function (e) {
-      if (e.version !== packages[e.repository]) {
+      if (e.version !== packages[e.repository].version) {
         // eslint-disable-next-line
-        log("Updating " + e.repository + ": " + packages[e.repository] + " => " + e.version);
+        log("Updating " + e.repository + ": " + packages[e.repository].version + " => " + e.version);
 
         download.push(install(e.repository));
       }

@@ -30,11 +30,20 @@ export function findPackages(directory: string): Array<string> {
  * - `version` field is the same as in package.json
  *
  * @example
- *  > Manager.list("directory");
+ *  > Manager.list("some_namespace");
  *  < {
- *      "packageA": "version",
- *      "packageB": "version",
- *      "packageC": "version",
+ *      "packageA": {
+ *        "namespace": "some_namespace",
+ *        "directory": "packageA-master",
+ *        "version": "x.x.x",
+ *        "package": "path/to/package.json"
+ *      },
+ *      "packageB": {
+ *        "namespace": "some_namespace",
+ *        "directory": "packageB-master",
+ *        "version": "x.x.x",
+ *        "package": "path/to/package.json"
+ *      }
  *    }
  *
  * @param   {string}  dest
@@ -42,14 +51,20 @@ export function findPackages(directory: string): Array<string> {
  * @async
  */
 
-export default function(dest: string): (directory: string) => Promise<Object> {
-  return async function(directory: string = ""): Promise<Object> {
-    const source = resolve(dest, directory);
+export default function(dest: string): (namespace?: string) => Promise<Object> {
+  return async function(namespace?: string = ""): Promise<Object> {
+    const source = resolve(dest, namespace);
     const output = {};
 
     for (const pkg of findPackages(source)) {
       const data = await readPackage(pkg);
-      output[data.legacyName] = data.version;
+
+      output[data.legacyName] = {
+        namespace: data.namepsace,
+        directory: data.directory,
+        version: data.version,
+        package: data.path,
+      };
     }
 
     return output;
