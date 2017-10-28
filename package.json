@@ -1,7 +1,7 @@
 {
     "name": "qilin-manager",
     "main": "dist/index.js",
-    "version": "1.0.0",
+    "version": "1.2.1",
     "author": "Łaniewski Bartosz <laniewski.bartozzz@gmail.com> (http://laniewski.me/)",
     "license": "MIT",
     "dependencies": {
