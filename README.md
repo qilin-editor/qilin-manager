@@ -1,5 +1,11 @@
 <div align="center">
   <h1>Qilin package manager</h1>
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/qilin-editor/qilin-manager.svg)](https://greenkeeper.io/)
+[![Build Status](https://img.shields.io/travis/qilin-editor/qilin-manager.svg)](https://travis-ci.org/qilin-editor/qilin-manager/)
+[![License](https://img.shields.io/github/license/qilin-editor/qilin-manager.svg)](LICENSE)
+[![npm version](https://img.shields.io/npm/v/qilin-manager.svg)](https://www.npmjs.com/package/qilin-manager)
+[![npm downloads](https://img.shields.io/npm/dt/qilin-manager.svg)](https://www.npmjs.com/package/qilin-manager)
   <br>
 
 **qilin-manager** is a simple and minimal package manager which allows you to install plugins and themes for [Qilin](https://github.com/qilin-editor/qilin-app). Packages are downloaded and prepared from GitHub.
@@ -20,8 +26,6 @@ const qpm = new QilinManager();
 ```
 
 ### [Installing packages](src/lib/commands/install.js)
-
-[![Greenkeeper badge](https://badges.greenkeeper.io/qilin-editor/qilin-manager.svg)](https://greenkeeper.io/)
 `qpm.install(package: string, namespace?: string): Promise`
 
 Asynchronously installs a specified package from GitHub. Once downloaded, the package is extracted in `dest` directory and properly prepared: its dependencies are downloaded by NPM and build scripts are launched.
