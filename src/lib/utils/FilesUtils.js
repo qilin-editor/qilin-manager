@@ -14,14 +14,14 @@ export function isPackage(source: string): boolean {
   return fs.existsSync(path.join(source, "package.json"));
 }
 
-export function readPackage(directory: string): Promise<Object> {
-  const base = path.basename(path.dirname(directory));
-  const file = path.resolve(directory, "package.json");
+export function readPackage(dir: string): Promise<Object> {
+  const base = path.basename(path.dirname(dir));
+  const file = path.resolve(dir, "package.json");
 
   return readFile(file, "utf8").then((data) => {
     try {
       data = JSON.parse(data);
-      data.directory = directory;
+      data.directory = dir;
       data.namespace = base;
       data.path = file;
 
@@ -30,11 +30,8 @@ export function readPackage(directory: string): Promise<Object> {
   });
 }
 
-export function updatePackage(
-  directory: string,
-  json: Object
-): Promise<Object> {
-  return readPackage(directory).then((data) => {
+export function updatePackage(dir: string, json: Object): Promise<Object> {
+  return readPackage(dir).then((data) => {
     return writeFile(data.path, JSON.stringify({
       ...data,
       ...json,

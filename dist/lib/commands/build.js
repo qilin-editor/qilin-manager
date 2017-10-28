@@ -15,7 +15,7 @@ var _debug = require("debug");
 
 var _child_process = require("child_process");
 
-var _FilesUtils = require("./utils/FilesUtils");
+var _FilesUtils = require("../utils/FilesUtils");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26,7 +26,7 @@ var log = (0, _debug.debug)("qilin:build");
  * Scripts which should be executed in order to build a dependency.
  *
  * @see   https://docs.npmjs.com/misc/scripts
- * @type  {Array}
+ * @type  {Array<string>}
  */
 
 var LIFECYCLE_SCRIPTS = exports.LIFECYCLE_SCRIPTS = [];
@@ -65,7 +65,7 @@ function execute(directory, script) {
 
 /**
  * Installs dependencies for a given package and executes several NPM scripts in
- * order to build the package.
+ * order to build the plugin.
  *
  * Scripts are executes in the order below:
  * 1. preinstall
@@ -74,8 +74,8 @@ function execute(directory, script) {
  * 4. prepare
  *
  * @example
- *  Manager.build("path/to/package_A")
- *  Manager.build("path/to/package_B")
+ *  qpm.build("path/to/package_A");
+ *  qpm.build("path/to/package_B");
  *
  * @param   {string}  directory
  * @async

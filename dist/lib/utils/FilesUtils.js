@@ -39,14 +39,14 @@ function isPackage(source) {
   return _fs2.default.existsSync(_path2.default.join(source, "package.json"));
 }
 
-function readPackage(directory) {
-  var base = _path2.default.basename(_path2.default.dirname(directory));
-  var file = _path2.default.resolve(directory, "package.json");
+function readPackage(dir) {
+  var base = _path2.default.basename(_path2.default.dirname(dir));
+  var file = _path2.default.resolve(dir, "package.json");
 
   return readFile(file, "utf8").then(function (data) {
     try {
       data = JSON.parse(data);
-      data.directory = directory;
+      data.directory = dir;
       data.namespace = base;
       data.path = file;
 
@@ -55,8 +55,8 @@ function readPackage(directory) {
   });
 }
 
-function updatePackage(directory, json) {
-  return readPackage(directory).then(function (data) {
+function updatePackage(dir, json) {
+  return readPackage(dir).then(function (data) {
     return writeFile(data.path, JSON.stringify((0, _extends3.default)({}, data, json)));
   });
 }

@@ -5,7 +5,7 @@
 **qilin-manager** is a simple and minimal package manager which allows you to install plugins and themes for [Qilin](https://github.com/qilin-editor/qilin-app). Packages are downloaded and prepared from GitHub.
 </div>
 
->**Disclaimer**: `qilin-manager` *is not a replacement for NPM, Yarn or any other package manager*. In fact, `qilin-manager` was created especially with [Qilin](https://github.com/qilin-editor/qilin-app) in mind and relies on NPM itself.
+>**Disclaimer**: `qilin-manager` *is not a replacement for NPM, Yarn or any other package manager*. In fact, `qilin-manager` was created especially for [Qilin](https://github.com/qilin-editor/qilin-app) and relies on NPM itself.
 
 <h2 align="center">Installation</h2>
 
@@ -18,47 +18,103 @@ $ npm install qilin-manager
 ```javascript
 import QilinManager from "qilin-manager";
 
-const qpm = QilinManager({
-  // …
-});
+const qpm = new QilinManager();
 ```
 
-### *Example 1: Download multiple packages*
+### Commands
 
+#### Installing packages <small><a href="https://github.com/qilin-editor/qilin-manager/blob/master/src/lib/commands/install.js">source</a></small>
+`qpm.install(package: string, namespace?: string): Promise`
+
+Asynchronously installs a specified package from GitHub. Once downloaded, the package is extracted in `dest` directory and properly prepared: its dependencies are downloaded by NPM and build scripts are launched.
+
+**Example:**
 ```javascript
 Promise.all([
-  qpm.install("kevva/download"),
-  qpm.install("kevva/brightness"),
-  qpm.install("kevva/screenshot-stream")
+  qpm.install("userA/repo"),
+  qpm.install("userB/repo", "namespaceB"),
+  qpm.install("userC/repo", "namespaceA")
 ]).then(() => {
   console.log("Done!");
 });
 ```
 
-### *Example 2: List downloaded packages*
+### Listing packages <small><a href="https://github.com/qilin-editor/qilin-manager/blob/master/src/lib/commands/list.js">source</a></small>
+`qpm.list(namespace?: string): Promise`
 
-You can list packages installed globally, or under a specific namespace with `qpm.list(namespace: ?string)`.
+Asynchronously returns a list of installed packages in `dest` directory under a given namespace. The returned list is an object whose keys correspond to packages names and values are objects containing:
+- `namespace`: plugin namespace;
+- `directory`: plugin parent directory;
+- `version`: same as in `package.json`;
+- `package` : full path to `package.json`;
 
+**Example:**
 ```javascript
 const all = await qpm.list();
 const themes = await qpm.list("themes");
 const plugins = await qpm.list("plugins");
 ```
 
-### *Example 3: Update downloaded packages*
+**Example output:**
+```json
+{
+    "packageA": {
+        "namespace": "namespaceA",
+        "directory": "packageA-master",
+        "version": "x.x.x",
+        "package": "[…]/namespaceA/packageA-master/package.json"
+    },
+    "packageB": {
+        "namespace": "namespaceB",
+        "directory": "packageB-master",
+        "version": "x.x.x",
+        "package": "[…]/namespaceB/packageB-master/package.json"
+    }
+}
+```
 
-You can update packages installed globally (or under a certain namespace) with `qpm.update(namespace: ?namespace)`.
+#### Updating packages <small><a href="https://github.com/qilin-editor/qilin-manager/blob/master/src/lib/commands/update.js">source</a></small>
+`qpm.update(namespace?: string): Promise`
 
+Asynchronously checks if locally installed packages under a certain namespace are up-to-date. If no, they are downloaded again.
+
+**Example:**
 ```javascript
 qpm.update().then(/* … */);
 qpm.update("themes").then(/* … */);
 qpm.update("plugins").then(/* … */);
 ```
 
-### *Example 4: Building a package*
+#### Loading a package <small><a href="https://github.com/qilin-editor/qilin-manager/blob/master/src/lib/commands/load.js">source</a></small>
+`qpm.load(package: string, namespace?: string): Promise`
 
-Packages are builded automatically once they are downloaded from GitHub. If for any reason you need to rebuild a package manually, you can use `qpm.build(directory: string)`.
+Asynchronously loads then executes a script in a virtual machine (V8 sandbox) and returns it's `module.exports` back to the client. All the dependencies are resolved automatically.
 
+**Example:**
 ```javascript
-qpm.build("path/to/directory").then(/* … */);
+const MyPlugin = await qpm.load("user/repo", "plugins");
+const instance = new MyPlugin(…);
 ```
+
+#### Building a package <small><a href="https://github.com/qilin-editor/qilin-manager/blob/master/src/lib/commands/build.js">source</a></small>
+
+Installs dependencies for a given package and executes several [NPM scripts](https://docs.npmjs.com/misc/scripts) in order to build the plugin. Scripts are executes in the order below:
+1. `preinstall`;
+2. `install`;
+3. `postinstall`;
+4. `prepare`;
+
+**Example:**
+```javascript
+qpm.build("full/path/to/package_A").then(/* … */);
+qpm.build("full/path/to/package_B").then(/* … */);
+```
+
+<h2 align="center">Configuration</h2>
+
+You can configure `qilin-manager` using environment variables.
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `QPM_HOME` | Destination path for downloaded packages | `HOME/.qpm/` |
+| `QPM_PROXY` | Custom proxy settings | `undefined` |

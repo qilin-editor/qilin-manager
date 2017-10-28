@@ -1,22 +1,18 @@
-const path = require("path");
-const manager = require("../dist/index").default;
-
-const Manager = manager({
-  dest: path.resolve(__dirname, "./packages"),
-});
+const QPM = require("../dist/index");
+const qpm = new QPM();
 
 Promise.all([
-  // Manager.install("Bartozzz/crawlerr", "plugins"),
-  // Manager.install("kevva/download", "themes"),
-  // Manager.install("kevva/brightness", "themes"),
-  // Manager.install("kevva/screenshot-stream", "themes"),
+  qpm.install("Bartozzz/crawlerr", "plugins"),
+  qpm.install("kevva/download", "themes"),
+  qpm.install("kevva/brightness", "themes"),
+  qpm.install("kevva/screenshot-stream", "themes"),
 ]).then(() => {
-  // Manager.update("themes");
+  return qpm.update("themes");
 }).then(() => {
-  // Manager.list("themes").then(console.log);
-  // Manager.list("plugins").then(console.log);
+  qpm.list("themes").then(console.log);
+  qpm.list("plugins").then(console.log);
 }).then(() => {
-  Manager.load("Bartozzz/crawlerr", "plugins").then((plugin) => {
+  qpm.load("Bartozzz/crawlerr", "plugins").then((plugin) => {
     const crawlerr = plugin({test: "A"});
     console.log(crawlerr);
   }).catch((err) => {
