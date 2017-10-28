@@ -1,9 +1,22 @@
 {
     "name": "qilin-manager",
     "main": "dist/index.js",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "author": "Łaniewski Bartosz <laniewski.bartozzz@gmail.com> (http://laniewski.me/)",
     "license": "MIT",
+    "keywords": [
+        "package-manager",
+        "theme-manager",
+        "qilin"
+    ],
+    "description": "Manager for themes and plugins - customizes Qilin with custom packages",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/qilin-editor/qilin-manager.git"
+    },
+    "bugs": {
+        "url": "https://github.com/qilin-editor/qilin-manager/issues"
+    },
     "dependencies": {
         "vm2": "^3.5.2",
         "debug": "^3.1.0",
