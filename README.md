@@ -105,8 +105,8 @@ Asynchronously searches a GitHub organization for repositories matching a specif
 
 **Example:**
 ```javascript
-const plugins = await qpm.search("org/repo", "project-plugin-");
-const themes = await qpm.search("org/repo", "project-theme-");
+const plugins = await qpm.search("organization", "project-plugin-");
+const themes = await qpm.search("organization", "project-theme-");
 ```
 
 **Example output:**
