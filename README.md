@@ -20,6 +20,8 @@ const qpm = new QilinManager();
 ```
 
 ### [Installing packages](src/lib/commands/install.js)
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/qilin-editor/qilin-manager.svg)](https://greenkeeper.io/)
 `qpm.install(package: string, namespace?: string): Promise`
 
 Asynchronously installs a specified package from GitHub. Once downloaded, the package is extracted in `dest` directory and properly prepared: its dependencies are downloaded by NPM and build scripts are launched.
