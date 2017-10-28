@@ -12,10 +12,16 @@ Promise.all([
   qpm.list("themes").then(console.log);
   qpm.list("plugins").then(console.log);
 }).then(() => {
-  qpm.load("Bartozzz/crawlerr", "plugins").then((plugin) => {
+  return qpm.load("Bartozzz/crawlerr", "plugins").then((plugin) => {
     const crawlerr = plugin({test: "A"});
     console.log(crawlerr);
   }).catch((err) => {
     console.log(err);
+  });
+}).then(() => {
+  return qpm.search("qilin-editor", "qilin-logo").then((packages) => {
+    console.log(packages);
+  }).catch((error) => {
+    console.log(error);
   });
 });

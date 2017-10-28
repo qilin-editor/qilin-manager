@@ -9,7 +9,7 @@ exports.default = function () {
     _fs2.default.mkdirSync(config.dest);
   }
 
-  return { install: _install2.default, update: _update2.default, list: _list2.default, load: _load2.default, build: _build2.default };
+  return { load: _load2.default, list: _list2.default, build: _build2.default, update: _update2.default, search: _search2.default, install: _install2.default };
 };
 
 var _fs = require("fs");
@@ -36,6 +36,10 @@ var _update = require("./lib/commands/update");
 
 var _update2 = _interopRequireDefault(_update);
 
+var _search = require("./lib/commands/search");
+
+var _search2 = _interopRequireDefault(_search);
+
 var _install = require("./lib/commands/install");
 
 var _install2 = _interopRequireDefault(_install);
@@ -53,6 +57,7 @@ module.exports = exports["default"];
  * @example
  *  const qpm = new QilinManager();
  *  qpm.install(…);
+ *  qpm.search(…);
  *  qpm.update(…);
  *  qpm.list(…);
  *  qpm.load(…);

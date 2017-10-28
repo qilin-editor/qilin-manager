@@ -35,7 +35,7 @@ Asynchronously installs a specified package from GitHub. Once downloaded, the pa
 Promise.all([
   qpm.install("userA/repo"),
   qpm.install("userB/repo", "namespaceB"),
-  qpm.install("userC/repo", "namespaceA")
+  qpm.install("userC/repo", "namespaceC")
 ]).then(() => {
   console.log("Done!");
 });
@@ -98,7 +98,24 @@ const MyPlugin = await qpm.load("user/repo", "plugins");
 const instance = new MyPlugin(…);
 ```
 
+### [Searching for packages](src/lib/commands/search.js)
+`qpm.search(organization: string, filter?: string): Promise`
+
+Asynchronously searches a GitHub organization for repositories matching a specified filter.
+
+**Example:**
+```javascript
+const plugins = await qpm.search("org/repo", "project-plugin-");
+const themes = await qpm.search("org/repo", "project-theme-");
+```
+
+**Example output:**
+
+Refer to [GitHub API](https://developer.github.com/v3/repos/#list-organization-repositories).
+
 ### [Building a package](src/lib/commands/build.js)
+
+>**Note**: packages are built automatically once installed using `qpm.install`.
 
 Installs dependencies for a given package and executes several [NPM scripts](https://docs.npmjs.com/misc/scripts) in order to build the plugin. Scripts are executes in the order below:
 1. `preinstall`;

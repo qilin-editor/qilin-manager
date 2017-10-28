@@ -1,6 +1,12 @@
 // @flow
 import request from "request";
 
+export const requestOptions: Object = {
+  headers: {
+    "User-Agent": "qilin-editor",
+  },
+};
+
 export function parseRepository(link: string): Object {
   let branch: string = "master";
   let owner: string = link.split("/")[0];
@@ -36,6 +42,41 @@ export function getRawFileLink(repo: string | Object, file: string): string {
   return `https://raw.githubusercontent.com/${repo.owner}/${repo.name}/${repo.branch}/${file}`;
 }
 
+export function getOrganizationRepos(
+  organization: string,
+  filter?: string
+): Promise<Array<Object>> {
+  const url = `https://api.github.com/orgs/${organization}/repos`;
+  const req = request.defaults({
+    ...requestOptions,
+  });
+
+  return new Promise((resolve, reject) => {
+    req(url, (error, response, body) => {
+      if (error) {
+        reject(error);
+      } else {
+        try {
+          const result:Array<Object> = JSON.parse(body);
+          const output: Array<Object> = [];
+
+          if (filter) {
+            for (const repo of result) {
+              if (repo.name.includes(filter)) {
+                output.push(repo);
+              }
+            }
+          }
+
+          resolve(output);
+        } catch (error) {
+          reject(body);
+        }
+      }
+    });
+  });
+}
+
 export function getRepositoryPackage(
   repo: string | Object,
   config: Object = {}
@@ -45,6 +86,7 @@ export function getRepositoryPackage(
   }
 
   const req = request.defaults({
+    ...requestOptions,
     proxy: config.proxy,
   });
 

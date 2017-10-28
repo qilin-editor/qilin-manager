@@ -5,6 +5,7 @@ import load from "./lib/commands/load";
 import list from "./lib/commands/list";
 import build from "./lib/commands/build";
 import update from "./lib/commands/update";
+import search from "./lib/commands/search";
 import install from "./lib/commands/install";
 
 /**
@@ -14,6 +15,7 @@ import install from "./lib/commands/install";
  * @example
  *  const qpm = new QilinManager();
  *  qpm.install(…);
+ *  qpm.search(…);
  *  qpm.update(…);
  *  qpm.list(…);
  *  qpm.load(…);
@@ -26,5 +28,5 @@ export default function(): Object {
     fs.mkdirSync(config.dest);
   }
 
-  return {install, update, list, load, build};
+  return {load, list, build, update, search, install};
 }
