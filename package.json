@@ -19,7 +19,7 @@
     },
     "dependencies": {
         "vm2": "^3.5.2",
-        "debug": "^3.1.0",
+        "debug": "^4.0.0",
         "download": "^6.2.5",
         "request": "^2.82.0"
     },
