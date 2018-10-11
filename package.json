@@ -20,7 +20,7 @@
     "dependencies": {
         "vm2": "^3.5.2",
         "debug": "^4.1.0",
-        "download": "^6.2.5",
+        "download": "^7.1.0",
         "request": "^2.82.0"
     },
     "devDependencies": {
