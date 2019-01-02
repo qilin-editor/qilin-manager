@@ -18,7 +18,7 @@
         "url": "https://github.com/qilin-editor/qilin-manager/issues"
     },
     "dependencies": {
-        "vm2": "^3.5.2",
+        "vm2": "^3.6.6",
         "debug": "^4.1.0",
         "download": "^7.1.0",
         "request": "^2.82.0"
