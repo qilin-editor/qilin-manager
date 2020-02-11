@@ -21,7 +21,7 @@
         "vm2": "^3.5.2",
         "debug": "^4.1.0",
         "download": "^7.1.0",
-        "request": "^2.82.0"
+        "request": "^2.88.2"
     },
     "devDependencies": {
         "flow-bin": "^0.64.0",
